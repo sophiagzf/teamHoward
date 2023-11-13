@@ -16,6 +16,7 @@ scorecard = raw_scorecard.loc[:, ["UNITID", "ACCREDAGENCY", "PREDDEG", "HIGHDEG"
 scorecard.head()
 
 # Keep only the columns we want from the IPEDS data
-ipeds = raw_ipeds.loc[:, ["INSTNM", "ADDR", "ZIP", "FIPS", ]]
+ipeds = raw_ipeds.loc[:, ["INSTNM", "ADDR", "ZIP", "FIPS", "CITY", "STABBR",
+                          "OPEID", "CBSA", "CSA", "LONGITUD", "LATITUDE"]]
 
 ipeds.head()
