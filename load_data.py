@@ -9,7 +9,7 @@ raw_scorecard = pd.read_csv("data/MERGED2018_19_PP.csv")
 
 # Keep only the columns we want from College Scorecard data
 scorecard = raw_scorecard.loc[:, ["UNITID", "ACCREDAGENCY", "PREDDEG", "HIGHDEG",
-                                  "CONTROL", "REGION", "CCBASIC", "ADM_RATE", 
+                                  "CONTROL", "REGION", "ADM_RATE", 
                                   "CCBASIC", "ADM_RATE", "TUITIONFEE_IN", "TUITIONFEE_OUT",
                                   "TUITIONFEE_PROG", "TUITFTE", "AVGFACSAL", "CDR2", "CDR3",
                                   "SAT_AVG", "PCTFLOAN"]]
