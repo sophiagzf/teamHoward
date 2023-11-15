@@ -2,7 +2,7 @@ import pandas as pd
 import re
 import argparse
 import os
-import credentials.py
+from credentials import DBNAME, HOST, USERNAME, PASSWORD
 import psycopg
 
 # Load raw csv files from the command line #
@@ -180,6 +180,18 @@ print(data.head())
 # Connnect, create conn connection object
 conn = psycopg.connect(
     host="pinniped.postgres.database.azure.com",
+    # if the host name is the same, can't we just
+    # include that in the README,
+    # And then directly import the other variables
+    # created in credentials.py like DBNAME, USERNAME,
+    # into here?
+    # Example:
+    #  Connect to the database using parameters from credentials.py
+    # conn = psycopg.connect(
+    #       dbname=DBNAME,
+    #       host=HOST,
+    #       user=USERNAME,
+    #       password=PASSWORD)
     dbname="yourusername",
     user="yourusername", 
     password="yourpassword"
