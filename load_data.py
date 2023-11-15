@@ -1,6 +1,7 @@
 import pandas as pd
 import re
 import argparse
+import os
 
 # Load raw csv files from the command line #
 # Take in user input: one College Scorecard csv file (starts with 'MERGED') and
@@ -20,12 +21,19 @@ if __name__ == '__main__':
                         nargs="?")
 
     args = parser.parse_args()
+    # Save the filepath names for future use
+    file_name_1 = args.college_scorecard
+    file_name_2 = args.ipeds
+
     with open(args.college_scorecard, "r") as file_object:
         raw_scorecard = file_object.read()
 
     with open(args.ipeds, "r") as file_object:
         raw_ipeds = file_object.read()
 
+# Format the filepath names so it is just the name of the file
+file_name1 = os.path.basename(file_name1)
+file_name1 = os.path.basename(file_name2)
 
 # Merge raw csv files #
 
