@@ -9,6 +9,7 @@ import os
 
 # Run command:
 # python3 load_data.py {COLLEGE SCORECARD FILEPATH} {IPEDS FILEPATH}
+# python3 load_data.py data/MERGED2018_19_PP.csv data/hd2019.csv
 
 file_name1 = None
 file_name2 = None
@@ -26,28 +27,17 @@ if __name__ == '__main__':
     file_name1 = args.college_scorecard
     file_name2 = args.ipeds
 
-    with open(args.college_scorecard, 'r') as file_object:
-        raw_scorecard = file_object.read()
-
-    with open(args.ipeds, 'r', encoding='cp1252') as file_object:
-        raw_ipeds = file_object.read()
-
 # Format the filepath names so it is just the name of the file
 file_name1 = os.path.basename(file_name1)
 file_name2 = os.path.basename(file_name2)
 
 # Merge raw csv files #
 
-###### TESTING WITH JUST A FEW ROWS
-
 # College Scorecard
-raw_scorecard = pd.read_csv(raw_scorecard)
-raw_scorecard = raw_scorecard.head()
+raw_scorecard = pd.read_csv(args.college_scorecard, low_memory=False)
 
 # IPEDS
-raw_ipeds = pd.read_csv(raw_ipeds, encoding='cp1252')
-raw_ipeds = raw_ipeds.head()
-
+raw_ipeds = pd.read_csv(args.ipeds, encoding='cp1252', low_memory=False)
 
 # Keep only the columns we want from College Scorecard data
 scorecard = raw_scorecard.loc[:, ['UNITID', 'ACCREDAGENCY',
@@ -67,7 +57,7 @@ ipeds = raw_ipeds.loc[:, ['INSTNM', 'ADDR', 'ZIP', 'FIPS', 'CITY', 'STABBR',
                           'OPEID', 'CBSA', 'CSA', 'LONGITUD', 'LATITUDE']]
 
 # Join the datasets together
-data = pd.merge(scorecard, ipeds, on='OPEID')
+data = pd.merge(scorecard, ipeds, on='OPEID', how='left')
 
 # Clean the data #
 
@@ -79,7 +69,7 @@ data = data.rename(columns={'OPEID': 'oepid',
                             'CITY': 'city',
                             'CCBASIC': 'ccbasic',
                             'LATITUDE': 'latitude',
-                            'LONGITUDE': 'longitude',
+                            'LONGITUD': 'longitude',
                             'FIPS': 'fips',
                             'REGION': 'region',
                             'CBSA': 'cbsa',
