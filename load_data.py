@@ -10,6 +10,8 @@ import os
 # Run command:
 # python3 load_data.py {COLLEGE SCORECARD FILEPATH} {IPEDS FILEPATH}
 
+###### TESTING WITH JUST A FEW ROWS
+
 file_name1 = None
 file_name2 = None
 
@@ -21,27 +23,32 @@ if __name__ == '__main__':
                         nargs="?")
 
     args = parser.parse_args()
-    # Save the filepath names for future use
-    file_name_1 = args.college_scorecard
-    file_name_2 = args.ipeds
 
-    with open(args.college_scorecard, "r") as file_object:
+    # Save the filepath names for future use
+    file_name1 = args.college_scorecard
+    file_name2 = args.ipeds
+
+    with open(args.college_scorecard, 'r') as file_object:
         raw_scorecard = file_object.read()
 
-    with open(args.ipeds, "r") as file_object:
+    with open(args.ipeds, 'r', encoding='cp1252') as file_object:
         raw_ipeds = file_object.read()
 
 # Format the filepath names so it is just the name of the file
 file_name1 = os.path.basename(file_name1)
-file_name1 = os.path.basename(file_name2)
+file_name2 = os.path.basename(file_name2)
 
 # Merge raw csv files #
 
+###### TESTING WITH JUST A FEW ROWS
+
 # College Scorecard
 raw_scorecard = pd.read_csv(raw_scorecard)
+raw_scorecard = raw_scorecard.head()
 
 # IPEDS
 raw_ipeds = pd.read_csv(raw_ipeds, encoding='cp1252')
+raw_ipeds = raw_ipeds.head()
 
 
 # Keep only the columns we want from College Scorecard data
