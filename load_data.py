@@ -194,7 +194,7 @@ conn = psycopg.connect(
     #       user=USERNAME,
     #       password=PASSWORD)
     dbname="yourusername",
-    user="yourusername", 
+    user="yourusername",
     password="yourpassword"
 )
 
