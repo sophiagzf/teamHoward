@@ -252,6 +252,41 @@ cur.execute(create_table)
 # Commit the transaction
 conn.commit()
 
+# Data loading and summary
+
+# To keep track of how much data has been read
+# and inserted into the database
+successful_inserts = 0
+# Create a file to store invalid rows
+invalid_rows_file = "invalid_rows.csv"
+
+try:
+    for index, row in data.iterrows():
+        # Insert data into the database
+        successful_inserts += 1
+
+    # If everything is successful, commit the transaction
+    conn.commit()
+# Handling errors & invalid rows rejected
+except Exception as e:
+    # Print the error message
+    print(f"Error during data insertion: {e}")
+
+    # Roll back the transaction to ensure data consistency
+    conn.rollback()
+
+    # Store the invalid row in a data frame
+    invalid_rows = pd.DataFrame(columns=data.columns)
+    invalid_rows = invalid_rows.append(row, ignore_index=True)
+
+    # Write invalid rows to a separate CSV file
+    invalid_rows.to_csv(invalid_rows_file, index=False)
+    print(f"Invalid rows written to: {invalid_rows_file}")
+
+# Print the summary after data insertion
+print(f"Rows successfully inserted into the database: {successful_inserts}")
+print(f"Rows omitted (due to errors, etc.): {len(data) - successful_inserts}")
+
 # Close the cursor and connection
 cur.close()
 conn.close()
