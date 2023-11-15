@@ -10,8 +10,6 @@ import os
 # Run command:
 # python3 load_data.py {COLLEGE SCORECARD FILEPATH} {IPEDS FILEPATH}
 
-###### TESTING WITH JUST A FEW ROWS
-
 file_name1 = None
 file_name2 = None
 
@@ -73,7 +71,7 @@ data = pd.merge(scorecard, ipeds, on='OPEID')
 
 # Clean the data #
 
-# Merge the data
+# Rename columns
 data = data.rename(columns={'OPEID': 'oepid',
                             'INSTNM': 'name',
                             'ADDR': 'address',
@@ -101,7 +99,7 @@ data = data.rename(columns={'OPEID': 'oepid',
                             'SAT_AVG': 'sat_avg',
                             'PCTFLOAN': 'prop_loan'})
 
-# combining the state and city together into address
+# Combining the state and city together into address
 data['address'] = data.apply(
     lambda row:
         f'{row["city"]}, {row["state"]} - {row["address"]}', axis=1)
