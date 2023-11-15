@@ -3,6 +3,7 @@ import re
 import argparse
 import os
 import credentials.py
+import psycopg
 
 # Load raw csv files from the command line #
 # Take in user input: one College Scorecard csv file (starts with 'MERGED') and
@@ -176,3 +177,17 @@ print(data.head())
 
 
 # Push data to the SQL database #
+# Connnect, create conn connection object
+conn = psycopg.connect(
+    host="pinniped.postgres.database.azure.com", dbname="yourusername",
+    user="yourusername", password="yourpassword"
+)
+
+# Create a cursor and use it to submit/execute a query:
+cur = conn.cursor()
+
+baz = "walrus"
+spam = "penguin"
+
+cur.execute("INSERT INTO foo (bar, baz, spam) "
+            "VALUES (17, %s, %s)", (baz, spam))
