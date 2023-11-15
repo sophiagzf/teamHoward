@@ -40,7 +40,7 @@ raw_scorecard = pd.read_csv(args.college_scorecard, low_memory=False)
 raw_ipeds = pd.read_csv(args.ipeds, encoding='cp1252', low_memory=False)
 
 # Keep only the columns we want from College Scorecard data
-scorecard = raw_scorecard.loc[:, ['UNITID', 'ACCREDAGENCY',
+scorecard = raw_scorecard.loc[:, ['OPEID', 'ACCREDAGENCY',
                                   'PREDDEG', 'HIGHDEG',
                                   'CONTROL', 'REGION', 'ADM_RATE',
                                   'CCBASIC', 'ADM_RATE', 'TUITIONFEE_IN',
@@ -48,9 +48,6 @@ scorecard = raw_scorecard.loc[:, ['UNITID', 'ACCREDAGENCY',
                                   'TUITIONFEE_PROG', 'TUITFTE', 'AVGFACSAL',
                                   'CDR2', 'CDR3',
                                   'SAT_AVG', 'PCTFLOAN']]
-
-# Rename UNITID to OPEID to match the IPEDS data
-scorecard = scorecard.rename(columns={'UNITID': 'OPEID'})
 
 # Keep only the columns we want from the IPEDS data
 ipeds = raw_ipeds.loc[:, ['INSTNM', 'ADDR', 'ZIP', 'FIPS', 'CITY', 'STABBR',
