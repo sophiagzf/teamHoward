@@ -1,44 +1,97 @@
 import pandas as pd
 import re
+import argparse
+
+# Load raw csv files from the command line #
+# Take in user input: one College Scorecard csv file (starts with 'MERGED') and
+# one IPEDS data file (starts with 'hd')
+
+# Run command:
+# python3 load_data.py {COLLEGE SCORECARD FILEPATH} {IPEDS FILEPATH}
+
+file_name1 = None
+file_name2 = None
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Get data files')
+    parser.add_argument('college_scorecard',
+                        nargs="?")
+    parser.add_argument('ipeds',
+                        nargs="?")
+
+    args = parser.parse_args()
+    with open(args.college_scorecard, "r") as file_object:
+        raw_scorecard = file_object.read()
+
+    with open(args.ipeds, "r") as file_object:
+        raw_ipeds = file_object.read()
+
+
+########### Merge raw csv files ################
+
 # College Scorecard
-raw_scorecard = pd.read_csv("MERGED2018_19_PP.csv")
+raw_scorecard = pd.read_csv(raw_scorecard)
 
 # IPEDS
-raw_ipeds = pd.read_csv("hd2019.csv", encoding="cp1252")
+raw_ipeds = pd.read_csv(raw_ipeds, encoding='cp1252')
 
 
 # Keep only the columns we want from College Scorecard data
-scorecard = raw_scorecard.loc[:, ["UNITID", "ACCREDAGENCY", "PREDDEG", "HIGHDEG",
-                                  "CONTROL", "REGION", "ADM_RATE",
-                                  "CCBASIC", "ADM_RATE", "TUITIONFEE_IN", "TUITIONFEE_OUT",
-                                  "TUITIONFEE_PROG", "TUITFTE", "AVGFACSAL", "CDR2", "CDR3",
-                                  "SAT_AVG", "PCTFLOAN"]]
+scorecard = raw_scorecard.loc[:, ['UNITID', 'ACCREDAGENCY',
+                                  'PREDDEG', 'HIGHDEG',
+                                  'CONTROL', 'REGION', 'ADM_RATE',
+                                  'CCBASIC', 'ADM_RATE', 'TUITIONFEE_IN',
+                                  'TUITIONFEE_OUT',
+                                  'TUITIONFEE_PROG', 'TUITFTE', 'AVGFACSAL',
+                                  'CDR2', 'CDR3',
+                                  'SAT_AVG', 'PCTFLOAN']]
 
 # Rename UNITID to OPEID to match the IPEDS data
-scorecard = scorecard.rename(columns={"UNITID": "OPEID"})
+scorecard = scorecard.rename(columns={'UNITID': 'OPEID'})
 
 # Keep only the columns we want from the IPEDS data
-ipeds = raw_ipeds.loc[:, ["INSTNM", "ADDR", "ZIP", "FIPS", "CITY", "STABBR",
-                          "OPEID", "CBSA", "CSA", "LONGITUD", "LATITUDE"]]
+ipeds = raw_ipeds.loc[:, ['INSTNM', 'ADDR', 'ZIP', 'FIPS', 'CITY', 'STABBR',
+                          'OPEID', 'CBSA', 'CSA', 'LONGITUD', 'LATITUDE']]
 
 # Join the datasets together
-data = pd.merge(scorecard, ipeds, on="OPEID")
+data = pd.merge(scorecard, ipeds, on='OPEID')
 
+# Clean the data #
 
-data = data.rename(columns={"OPEID": "oepid", "INSTNM": "name", "ADDR": "address", "STABBR": "state", "CITY": "city", "CCBASIC": "ccbasic", 
-"LATITUDE": "latitude", "LONGITUDE": "longitude", "FIPS": "fips", "REGION": "region", "CBSA": "cbsa", "CSA": "csa", "ACCREDAGENCY": "accreditor", "PREDDEG": "pred_degree",
-"HIGHDEG": "highest_degree", "CONTROL": "control", "ADM_RATE": "admission_rate", "TUITIONFEE_IN": "in_state_tuit", "TUITIONFEE_OUT": "out_state_tuit",
-"TUITIONFEE_PROG": "prog_year_tuit", "TUITFTE": "revenue_tuit", "AVGFACSAL": "avg_faculty_salary", "CDR2": "two_yr_default", "CDR3": "three_yr_default", 
-"SAT_AVG": "sat_avg", "PCTFLOAN": "prop_loan"})
+# Merge the data
+data = data.rename(columns={'OPEID': 'oepid',
+                            'INSTNM': 'name',
+                            'ADDR': 'address',
+                            'STABBR': 'state',
+                            'CITY': 'city',
+                            'CCBASIC': 'ccbasic',
+                            'LATITUDE': 'latitude',
+                            'LONGITUDE': 'longitude',
+                            'FIPS': 'fips',
+                            'REGION': 'region',
+                            'CBSA': 'cbsa',
+                            'CSA': 'csa',
+                            'ACCREDAGENCY': 'accreditor',
+                            'PREDDEG': 'pred_degree',
+                            'HIGHDEG': 'highest_degree',
+                            'CONTROL': 'control',
+                            'ADM_RATE': 'admission_rate',
+                            'TUITIONFEE_IN': 'in_state_tuit',
+                            'TUITIONFEE_OUT': 'out_state_tuit',
+                            'TUITIONFEE_PROG': 'prog_year_tuit',
+                            'TUITFTE': 'revenue_tuit',
+                            'AVGFACSAL': 'avg_faculty_salary',
+                            'CDR2': 'two_yr_default',
+                            'CDR3': 'three_yr_default',
+                            'SAT_AVG': 'sat_avg',
+                            'PCTFLOAN': 'prop_loan'})
+
 # combining the state and city together into address
-data['address'] = data.apply(lambda row: f"{row['city']}, {row['state']} - {row['address']}", axis=1)
-
-file_name1 = "MERGED2018_19_PP.csv"
-file_name2 = "hd2019.csv"
+data['address'] = data.apply(lambda row: f'{row["city"]}, {row["state"]} - {row["address"]}', axis=1)
 
 
 def extract_year_from_filename(file_name):
-    if "MERGED" in file_name:
+    if 'MERGED' in file_name:
         match = re.search(r'\d{4}_\d{2}', file_name)
         if match:
             year_str = match.group().split('_')[1]
@@ -60,19 +113,24 @@ if year1:
 elif year2:
     data['extracted_year'] = year2
 else:
-    print("Year not found in file name")
+    print('Year not found in file name')
 
-numeric_columns = ["opeid", "ccbasic", "latitude", "longitude", "fips", "cbsa", "csa",
-"admission_rate", "in_state_tuit", "out_state_tuit",
-"prog_year_tuit", "revenue_tuit", "avg_faculty_salary", "two_yr_default", "three_yr_default", 
-"sat_avg", "prop_loan"]
+numeric_columns = ['opeid', 'ccbasic', 'latitude',
+                   'longitude', 'fips', 'cbsa',
+                   'csa', 'admission_rate',
+                   'in_state_tuit', 'out_state_tuit',
+                   'prog_year_tuit', 'revenue_tuit',
+                   'avg_faculty_salary', 'two_yr_default',
+                   'three_yr_default',
+                   'sat_avg', 'prop_loan']
 
 # Replace -999 with None in numeric columns
 for col in numeric_columns:
     if col in data.columns:
         data[col] = data[col].replace(-999, None)
 
-data['extracted_year'] = pd.to_datetime(data["extracted_year"].astype(str) + '-01-01')
+data['extracted_year'] = pd.to_datetime(
+    data['extracted_year'].astype(str) + '-01-01')
 
 # Mapping for degree
 degree_mapping = {
@@ -88,7 +146,7 @@ region_mapping = {
     0: 'US Service',
     1: 'New England',
     2: 'Mid East',
-    3: 'Great Lakes', 
+    3: 'Great Lakes',
     4: 'Plains',
     5: 'Southeast',
     6: 'Southwest',
@@ -112,3 +170,6 @@ data['control'] = data['control'].map(ownership_mapping)
 
 # Check the output
 print(data.head())
+
+
+# Push data to the SQL database #
