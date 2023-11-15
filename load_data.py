@@ -3,7 +3,6 @@ import re
 import argparse
 import os
 from credentials import DBNAME, HOST, USERNAME, PASSWORD
-# ^ see comments at the end in connection object creation
 import psycopg
 
 # Load raw csv files from the command line #
@@ -179,24 +178,12 @@ print(data.head())
 
 # Push data to the SQL database #
 # Connnect, create conn connection object
+# Connect to the database using parameters from credentials.py
 conn = psycopg.connect(
-    host="pinniped.postgres.database.azure.com",
-    # if the host name is the same, can't we just
-    # include that in the README,
-    # And then directly import the other variables
-    # created in credentials.py like DBNAME, USERNAME,
-    # into here?
-    # Example:
-    #  Connect to the database using parameters from credentials.py
-    # conn = psycopg.connect(
-    #       dbname=DBNAME,
-    #       host=HOST,
-    #       user=USERNAME,
-    #       password=PASSWORD)
-    dbname="yourusername",
-    user="yourusername",
-    password="yourpassword"
-)
+    dbname=DBNAME,
+    host=HOST,
+    user=USERNAME,
+    password=PASSWORD)
 
 # Create a cursor and use it to submit/execute a query:
 cur = conn.cursor()
