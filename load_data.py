@@ -27,7 +27,7 @@ if __name__ == '__main__':
         raw_ipeds = file_object.read()
 
 
-########### Merge raw csv files ################
+# Merge raw csv files #
 
 # College Scorecard
 raw_scorecard = pd.read_csv(raw_scorecard)
@@ -87,7 +87,9 @@ data = data.rename(columns={'OPEID': 'oepid',
                             'PCTFLOAN': 'prop_loan'})
 
 # combining the state and city together into address
-data['address'] = data.apply(lambda row: f'{row["city"]}, {row["state"]} - {row["address"]}', axis=1)
+data['address'] = data.apply(
+    lambda row:
+        f'{row["city"]}, {row["state"]} - {row["address"]}', axis=1)
 
 
 def extract_year_from_filename(file_name):
