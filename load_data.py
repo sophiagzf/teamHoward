@@ -259,7 +259,7 @@ except Exception as e:
     # Print the error message
     print(f"Error during data insertion: {e}")
 
-    # Roll back the transaction to ensure data consistency
+    # Roll back the transaction upon error
     conn.rollback()
 
     # Store the invalid row in a data frame
