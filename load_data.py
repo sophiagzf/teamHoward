@@ -2,6 +2,7 @@ import pandas as pd
 import re
 import argparse
 import os
+import credentials.py
 
 # Load raw csv files from the command line #
 # Take in user input: one College Scorecard csv file (starts with 'MERGED') and
