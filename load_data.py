@@ -3,6 +3,7 @@ import re
 import argparse
 import os
 from credentials import DBNAME, HOST, USERNAME, PASSWORD
+# ^ see comments at the end in connection object creation
 import psycopg
 
 # Load raw csv files from the command line #
