@@ -187,7 +187,6 @@ data = data.where(pd.notnull(data), None)
 
 # Check the output
 print(data.head())
-print(data.dtypes)
 
 # Push data to the SQL database #
 # Connnect, create conn connection object
