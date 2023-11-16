@@ -61,7 +61,7 @@ data = pd.merge(scorecard, ipeds, on='OPEID', how='left')
 # Clean the data #
 
 # Rename columns
-data = data.rename(columns={'OPEID': 'oepid',
+data = data.rename(columns={'OPEID': 'opeid',
                             'INSTNM': 'name',
                             'ADDR': 'address',
                             'STABBR': 'state',
@@ -177,6 +177,7 @@ data['fips'] = data['fips'].astype('Int64')
 data['ccbasic'] = data['ccbasic'].astype('Int64')
 data['cbsa'] = data['cbsa'].astype('Int64')
 data['csa'] = data['csa'].astype('Int64')
+data['opeid'] = data['opeid'].astype('object')
 
 # Cast to object
 data['accreditor'] = data['accreditor'].astype('object')
@@ -186,6 +187,7 @@ data = data.where(pd.notnull(data), None)
 
 # Check the output
 print(data.head())
+print(data.dtypes)
 
 # Push data to the SQL database #
 # Connnect, create conn connection object
@@ -199,7 +201,7 @@ conn = psycopg.connect(
 # Create a cursor and use it to submit/execute a query:
 cur = conn.cursor()
 
-# Data loading and summary
+# Data loading and summary #
 
 # To keep track of how much data has been read
 # and inserted into the database
