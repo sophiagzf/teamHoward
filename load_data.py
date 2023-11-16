@@ -56,6 +56,10 @@ scorecard = raw_scorecard.loc[:, ['OPEID', 'ACCREDAGENCY',
 ipeds = raw_ipeds.loc[:, ['INSTNM', 'ADDR', 'ZIP', 'FIPS', 'CITY', 'STABBR',
                           'OPEID', 'CBSA', 'CSA', 'LONGITUD', 'LATITUDE']]
 
+# Make sure the OPEID (column we merge on) are both of type object
+scorecard['OPEID'] = scorecard['OPEID'].astype('object')
+ipeds['OPEID'] = ipeds['OPEID'].astype('object')
+
 # Join the datasets together
 data = pd.merge(scorecard, ipeds, on='OPEID', how='left')
 
@@ -178,7 +182,6 @@ data['fips'] = data['fips'].astype('Int64')
 data['ccbasic'] = data['ccbasic'].astype('Int64')
 data['cbsa'] = data['cbsa'].astype('Int64')
 data['csa'] = data['csa'].astype('Int64')
-data['opeid'] = data['opeid'].astype('object')
 
 # Cast to object
 data['accreditor'] = data['accreditor'].astype('object')
