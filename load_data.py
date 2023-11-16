@@ -181,6 +181,9 @@ data['csa'] = data['csa'].astype('Int64')
 # Cast to object
 data['accreditor'] = data['accreditor'].astype('object')
 
+# NAs to None types
+data = data.where(pd.notnull(data), None)
+
 # Check the output
 print(data.head())
 
@@ -195,9 +198,6 @@ conn = psycopg.connect(
 
 # Create a cursor and use it to submit/execute a query:
 cur = conn.cursor()
-
-# NAs to None types
-data = data.where(pd.notnull(data), None)
 
 # Data loading and summary
 
