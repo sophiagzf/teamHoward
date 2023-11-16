@@ -196,8 +196,8 @@ conn = psycopg.connect(
 # Create a cursor and use it to submit/execute a query:
 cur = conn.cursor()
 
-# Commit the transaction
-conn.commit()
+# NAs to None types
+data = data.where(pd.notnull(data), None)
 
 # Data loading and summary
 
