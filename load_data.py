@@ -4,6 +4,7 @@ import argparse
 import os
 from credentials import DBNAME, HOST, USERNAME, PASSWORD
 import psycopg
+import numpy as np
 
 # Load raw csv files from the command line #
 # Take in user input: one College Scorecard csv file (starts with 'MERGED') and
@@ -184,6 +185,7 @@ data['accreditor'] = data['accreditor'].astype('object')
 
 # NAs to None types
 data = data.where(pd.notnull(data), None)
+data = data.astype("object").replace(np.nan, None)
 
 # Check the output
 print(data.head())
