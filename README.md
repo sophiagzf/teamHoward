@@ -32,7 +32,7 @@ Make sure you have the table created into your SQL database.
 The code for creating the table is in database-schema.ipynb. Run the code chunks to create the SQL table if you have not already.
 
 Make sure you have the following Python libraries loaded: 
-pandas, re, argparse, os, psycopg
+pandas, re, argparse, os, psycopg, numpy
 
 Run the following command: 
 
