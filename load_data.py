@@ -45,7 +45,7 @@ raw_ipeds = pd.read_csv(args.ipeds, encoding='cp1252', low_memory=False)
 scorecard = raw_scorecard.loc[:, ['OPEID', 'ACCREDAGENCY',
                                   'PREDDEG', 'HIGHDEG',
                                   'CONTROL', 'REGION', 'ADM_RATE',
-                                  'CCBASIC', 'ADM_RATE', 'TUITIONFEE_IN',
+                                  'CCBASIC', 'TUITIONFEE_IN',
                                   'TUITIONFEE_OUT',
                                   'TUITIONFEE_PROG', 'TUITFTE', 'AVGFACSAL',
                                   'CDR2', 'CDR3',
@@ -172,9 +172,17 @@ data['highest_degree'] = data['highest_degree'].map(degree_mapping)
 data['region'] = data['region'].map(region_mapping)
 data['control'] = data['control'].map(ownership_mapping)
 
+# Cast floats to ints for a few columns
+data['fips'] = data['fips'].astype('Int64')
+data['ccbasic'] = data['ccbasic'].astype('Int64')
+data['cbsa'] = data['cbsa'].astype('Int64')
+data['csa'] = data['csa'].astype('Int64')
+
+# Cast to object
+data['accreditor'] = data['accreditor'].astype('object')
+
 # Check the output
 print(data.head())
-
 
 # Push data to the SQL database #
 # Connnect, create conn connection object
@@ -199,9 +207,31 @@ successful_inserts = 0
 # Create a file to store invalid rows
 invalid_rows_file = "invalid_rows.csv"
 
+insert_cmd = """
+        INSERT INTO institutions
+        (opeid, accreditor, pred_degree, highest_degree,
+        control, region, admission_rate, ccbasic,
+        in_state_tuit, out_state_tuit, prog_year_tuit, revenue_tuit,
+        avg_faculty_salary, two_yr_default, three_yr_default, sat_avg,
+        prop_loan, name, address, ZIP,
+        fips, city, state, cbsa,
+        csa, longitude, latitude, extracted_year)
+        VALUES
+        (%s, %s, %s, %s,
+        %s, %s, %s, %s,
+        %s, %s, %s, %s,
+        %s, %s, %s, %s,
+        %s, %s, %s, %s,
+        %s, %s, %s, %s,
+        %s, %s, %s, %s);
+    """
+
+invalid_rows = pd.DataFrame(columns=data.columns)
+
 try:
     for index, row in data.iterrows():
         # Insert data into the database
+        cur.execute(insert_cmd, tuple(row))
         successful_inserts += 1
 
     # If everything is successful, commit the transaction
@@ -210,21 +240,21 @@ try:
 except Exception as e:
     # Print the error message
     print(f"Error during data insertion: {e}")
+    print(f"Error is at this index: {index}")
 
     # Roll back the transaction upon error
     conn.rollback()
 
     # Store the invalid row in a data frame
-    invalid_rows = pd.DataFrame(columns=data.columns)
-    invalid_rows = invalid_rows.append(row, ignore_index=True)
-
-    # Write invalid rows to a separate CSV file
-    invalid_rows.to_csv(invalid_rows_file, index=False)
-    print(f"Invalid rows written to: {invalid_rows_file}")
+    invalid_rows.loc[len(invalid_rows)] = row
 
 # Print the summary after data insertion
 print(f"Rows successfully inserted into the database: {successful_inserts}")
 print(f"Rows omitted (due to errors, etc.): {len(data) - successful_inserts}")
+
+# Write invalid rows to a separate CSV file
+invalid_rows.to_csv(invalid_rows_file, index=False)
+print(f"Invalid rows written to: {invalid_rows_file}")
 
 # Close the cursor and connection
 cur.close()
