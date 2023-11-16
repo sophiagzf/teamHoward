@@ -188,54 +188,6 @@ conn = psycopg.connect(
 # Create a cursor and use it to submit/execute a query:
 cur = conn.cursor()
 
-# SQL commands to create types and table
-create_types = """
-    CREATE TYPE degree AS ENUM(
-        'NA','Certificate', 'Associate', 'Bachelor', 'Graduate');
-    CREATE TYPE region_type AS ENUM(
-        'US Service', 'New England', 'Mid East', 'Great Lakes',
-        'Plains', 'Southeast', 'Southwest', 'Rocky Mountains',
-        'Far West', 'Outlying Areas');
-    CREATE TYPE ownership AS ENUM(
-        'Public', 'Private Non-Profit', 'Private For-Profit');
-"""
-
-create_table = """
-    CREATE TABLE institutions (
-        opeid VARCHAR(10) PRIMARY KEY,
-        name TEXT,
-        location TEXT,
-        address TEXT,
-        latitude FLOAT,
-        longitude FLOAT,
-        fips INT,
-        region region_type,
-        ccbasic INT,
-        cbsa FLOAT,
-        csa FLOAT,
-        accreditor TEXT,
-        pred_degree degree,
-        highest_degree degree,
-        control ownership,
-        admission_rate FLOAT CHECK (
-            admission_rate <= 1 AND admission_rate >= 0),
-        in_state_tuit INT,
-        out_state_tuit INT,
-        prog_year_tuit INT,
-        revenue_tuit INT,
-        two_yr_default FLOAT,
-        three_yr_default FLOAT,
-        avg_faculty_salary INT,
-        avg_sat FLOAT,
-        pct_loan FLOAT,
-        extracted_year TEXT
-    );
-"""
-
-# Execute the commands to create types and the table
-cur.execute(create_types)
-cur.execute(create_table)
-
 # Commit the transaction
 conn.commit()
 
