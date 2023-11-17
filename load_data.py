@@ -257,7 +257,7 @@ omitted_rows = len(data) - successful_inserts
 difference = len(invalid_rows)
 
 # Print the summary after data insertion
-print("\n \n \n Data loading complete.")
+print("\n \n \nData loading complete.")
 print(f"Rows successfully inserted into the database: {inserted_rows}")
 print(f"Rows omitted (due to errors, etc.): {omitted_rows}")
 print(f"Number of rows in: {len(data)}")
