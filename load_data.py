@@ -254,9 +254,16 @@ except Exception as e:
     # Store the invalid row in a data frame
     invalid_rows.loc[len(invalid_rows)] = row
 
+inserted_rows = successful_inserts
+omitted_rows = len(data) - successful_inserts
+difference = inserted_rows - omitted_rows
+
 # Print the summary after data insertion
-print(f"Rows successfully inserted into the database: {successful_inserts}")
-print(f"Rows omitted (due to errors, etc.): {len(data) - successful_inserts}")
+print(f"Rows successfully inserted into the database: {inserted_rows}")
+print(f"Rows omitted (due to errors, etc.): {omitted_rows}")
+print(f"Number of rows in: {len(data)}")
+print(f"Number of rows out: {inserted_rows}")
+print(f"Difference in number of rows in vs. out: {difference}")
 
 # Write invalid rows to a separate CSV file
 invalid_rows.to_csv(invalid_rows_file, index=False)
