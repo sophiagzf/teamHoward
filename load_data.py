@@ -234,31 +234,30 @@ insert_cmd = """
 
 invalid_rows = pd.DataFrame(columns=data.columns)
 
-try:
-    for index, row in data.iterrows():
+for index, row in data.iterrows():
+    try:
         # Insert data into the database
         cur.execute(insert_cmd, tuple(row))
         successful_inserts += 1
+        conn.commit()
+    # Handling errors & invalid rows rejected
+    except Exception as e:
+        # Print the error message
+        print(f"Error during data insertion: {e}")
+        print(f"Error is at this index: {index}")
 
-    # If everything is successful, commit the transaction
-    conn.commit()
-# Handling errors & invalid rows rejected
-except Exception as e:
-    # Print the error message
-    print(f"Error during data insertion: {e}")
-    print(f"Error is at this index: {index}")
+        # Roll back the transaction upon error
+        conn.rollback()
 
-    # Roll back the transaction upon error
-    conn.rollback()
-
-    # Store the invalid row in a data frame
-    invalid_rows.loc[len(invalid_rows)] = row
+        # Store the invalid row in a data frame
+        invalid_rows.loc[len(invalid_rows)] = row
 
 inserted_rows = successful_inserts
 omitted_rows = len(data) - successful_inserts
-difference = inserted_rows - omitted_rows
+difference = len(invalid_rows)
 
 # Print the summary after data insertion
+print("\n \n \n Data loading complete.")
 print(f"Rows successfully inserted into the database: {inserted_rows}")
 print(f"Rows omitted (due to errors, etc.): {omitted_rows}")
 print(f"Number of rows in: {len(data)}")
