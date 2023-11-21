@@ -48,7 +48,7 @@ Congrats! Your data should be loaded into the SQL database!
 Please make sure you have the following Python libraries:
 pandas, papermill, nbconvert
 
-Please make sure you have the following OS libraries for converting the report to a pdf:
+Please make sure you have the following OS libraries for converting the report to a html file:
 
 MacTex (for macOS): https://tug.org/mactex/mactex-download.html
 
@@ -60,4 +60,4 @@ There are two command line files to run:
 
 papermill create_report.ipynb create_report.ipynb -p YEAR {YEAR FOR REPORT} -k python3
 
-jupyter nbconvert --to pdf create_report.ipynb
+jupyter nbconvert --to html create_report.ipynb
