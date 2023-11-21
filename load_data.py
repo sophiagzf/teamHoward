@@ -12,7 +12,7 @@ import numpy as np
 
 # Run command:
 # python3 load_data.py {COLLEGE SCORECARD FILEPATH} {IPEDS FILEPATH}
-# python3 load_data.py data/MERGED2018_19_PP.csv data/hd2019.csv
+# Example: python3 load_data.py data/MERGED2018_19_PP.csv data/hd2019.csv
 
 file_name1 = None
 file_name2 = None
