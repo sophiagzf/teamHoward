@@ -27,10 +27,12 @@ Example:
 
 "hd2019.csv" contains the IPEDS data for 2019.
 
-### 3. Insert data into the SQL database.
-Make sure you have the table created into your SQL database.
-The code for creating the table is in database-schema.ipynb. Run the code chunks to create the SQL table if you have not already.
+### 3. Create the SQL table: institutions
+This step will only need to be completed once and if you drop the institutions table in your SQL database.
+Make sure you have the 'institutions' table created in your SQL database.
+The code for creating the table is in database-schema.ipynb. Run the two code chunks to create the SQL table and proper datatypes required for the institutions table.
 
+### 4. Insert data into the SQL database.
 Make sure you have the following Python libraries loaded: 
 pandas, re, argparse, os, psycopg, numpy
 
@@ -45,6 +47,8 @@ python load_data.py data/MERGED2018_19_PP.csv data/hd2019.csv
 Congrats! Your data should be loaded into the SQL database!
 
 ## How to Generate the Report
+Please make sure you have the credentials.py file filled out from part 1 of loading the SQL database.
+
 Please make sure you have the following Python libraries:
 pandas, papermill, nbconvert
 
