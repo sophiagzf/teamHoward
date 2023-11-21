@@ -60,4 +60,6 @@ There are two command line files to run:
 
 papermill create_report.ipynb create_report.ipynb -p YEAR {YEAR FOR REPORT} -k python3
 
-jupyter nbconvert --to html create_report.ipynb
+jupyter nbconvert --to html create_report.ipynb --output reports/report_{YEAR FOR REPORT}.html
+
+Please make sure to rename the html file in the second command to the year that the report came from! The reports folder is in the gitignore.

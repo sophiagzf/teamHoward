@@ -2,3 +2,4 @@ data/
 credentials.py
 data.csv
 invalid_rows.csv
+reports/
