@@ -1,5 +1,5 @@
-# Team Howard: College Scorecard Data
-Instructions for how to load and update College Scorecard data supplemented by IPEDS data.
+# Team Howard: College Scorecard and IPEDS Data
+Instructions for how to use our data pipeline. First, to load and update College Scorecard data supplemented by IPEDS data, and second to generate a financial report given year.
 
 ## How to Load Data into SQL Database
 
@@ -43,3 +43,21 @@ Example:
 python load_data.py data/MERGED2018_19_PP.csv data/hd2019.csv
 
 Congrats! Your data should be loaded into the SQL database!
+
+## How to Generate the Report
+Please make sure you have the following Python libraries:
+pandas, papermill, nbconvert
+
+Please make sure you have the following OS libraries for converting the report to a pdf:
+
+MacTex (for macOS): https://tug.org/mactex/mactex-download.html
+
+XeLaTeX (for Linux & Ubuntu): sudo apt-get install texlive-xetex texlive-fonts-recommended texlive-plain-generic
+
+Latex Project (for Windows): https://www.latex-project.org/get/ 
+
+There are two command line files to run:
+
+papermill create_report.ipynb create_report.ipynb -p YEAR {YEAR FOR REPORT} -k python3
+
+jupyter nbconvert --to pdf create_report.ipynb
