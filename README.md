@@ -64,6 +64,6 @@ There are two command line files to run:
 
 papermill create_report.ipynb create_report.ipynb -p YEAR {YEAR FOR REPORT}
 
-jupyter nbconvert --to html create_report.ipynb --output reports/report_{YEAR FOR REPORT}.html
+jupyter nbconvert --to html create_report.ipynb --output reports/report_{YEAR FOR REPORT}.html --no-input
 
 Please make sure to rename the html file in the second command to the year that the report came from! The reports folder is in the gitignore. From the html file, you can download it as a pdf by opening the file in a web browser, such as Chrome, and selecting 'Save to PDF' when you print the page.
