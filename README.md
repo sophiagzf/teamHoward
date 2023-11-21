@@ -52,14 +52,6 @@ Please make sure you have the credentials.py file filled out from part 1 of load
 Please make sure you have the following Python libraries:
 pandas, papermill, nbconvert, jupyter
 
-Please make sure you have the following OS libraries for converting the report to a html file:
-
-MacTex (for macOS): https://tug.org/mactex/mactex-download.html
-
-XeLaTeX (for Linux & Ubuntu): sudo apt-get install texlive-xetex texlive-fonts-recommended texlive-plain-generic
-
-Latex Project (for Windows): https://www.latex-project.org/get/ 
-
 There are two command line files to run:
 
 papermill create_report.ipynb create_report.ipynb -p YEAR {YEAR FOR REPORT}
