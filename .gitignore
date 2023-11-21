@@ -4,3 +4,4 @@ data.csv
 invalid_rows.csv
 reports/
 .DS_store
+__pycache__/
