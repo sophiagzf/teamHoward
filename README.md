@@ -50,7 +50,7 @@ Congrats! Your data should be loaded into the SQL database!
 Please make sure you have the credentials.py file filled out from part 1 of loading the SQL database.
 
 Please make sure you have the following Python libraries:
-pandas, papermill, nbconvert
+pandas, papermill, nbconvert, jupyter
 
 Please make sure you have the following OS libraries for converting the report to a html file:
 
@@ -62,7 +62,7 @@ Latex Project (for Windows): https://www.latex-project.org/get/
 
 There are two command line files to run:
 
-papermill create_report.ipynb create_report.ipynb -p YEAR {YEAR FOR REPORT} -k python3
+papermill create_report.ipynb create_report.ipynb -p YEAR {YEAR FOR REPORT}
 
 jupyter nbconvert --to html create_report.ipynb --output reports/report_{YEAR FOR REPORT}.html
 
