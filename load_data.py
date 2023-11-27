@@ -260,7 +260,7 @@ end_time = time.time()
 inserted_rows = successful_inserts
 omitted_rows = len(data) - successful_inserts
 difference = len(invalid_rows)
-total_time = end_time - start_time
+total_time = (end_time - start_time) / 60
 
 # Print the summary after data insertion
 print("\n \n \nData loading complete.")
