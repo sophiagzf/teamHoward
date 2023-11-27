@@ -2,6 +2,7 @@ import pandas as pd
 import re
 import argparse
 import os
+import time
 from credentials import DBNAME, HOST, USERNAME, PASSWORD
 import psycopg
 import numpy as np
@@ -234,6 +235,8 @@ insert_cmd = """
 
 invalid_rows = pd.DataFrame(columns=data.columns)
 
+start_time = time.time()
+
 for index, row in data.iterrows():
     try:
         # Insert data into the database
@@ -252,9 +255,12 @@ for index, row in data.iterrows():
         # Store the invalid row in a data frame
         invalid_rows.loc[len(invalid_rows)] = row
 
+end_time = time.time()
+
 inserted_rows = successful_inserts
 omitted_rows = len(data) - successful_inserts
 difference = len(invalid_rows)
+total_time = end_time - start_time
 
 # Print the summary after data insertion
 print("\n \n \nData loading complete.")
@@ -263,6 +269,7 @@ print(f"Rows omitted (due to errors, etc.): {omitted_rows}")
 print(f"Number of rows in: {len(data)}")
 print(f"Number of rows out: {inserted_rows}")
 print(f"Difference in number of rows in vs. out: {difference}")
+print(f"This process took {total_time} minutes.")
 
 # Write invalid rows to a separate CSV file
 invalid_rows.to_csv(invalid_rows_file, index=False)
