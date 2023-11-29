@@ -7,7 +7,9 @@ from credentials import DBNAME, HOST, USERNAME, PASSWORD
 import psycopg
 import numpy as np
 
+############################################
 # Load raw csv files from the command line #
+############################################
 # Take in user input: one College Scorecard csv file (starts with 'MERGED') and
 # one IPEDS data file (starts with 'hd')
 
@@ -35,7 +37,9 @@ if __name__ == '__main__':
 file_name1 = os.path.basename(file_name1)
 file_name2 = os.path.basename(file_name2)
 
+########################
 # Merge raw csv files #
+########################
 
 # College Scorecard
 raw_scorecard = pd.read_csv(args.college_scorecard, low_memory=False)
@@ -64,7 +68,9 @@ ipeds['OPEID'] = ipeds['OPEID'].astype('object')
 # Join the datasets together
 data = pd.merge(scorecard, ipeds, on='OPEID', how='left')
 
+###################
 # Clean the data #
+###################
 
 # Rename columns
 data = data.rename(columns={'OPEID': 'opeid',
@@ -117,11 +123,14 @@ def extract_year_from_filename(file_name):
 
 year1 = extract_year_from_filename(file_name1)
 year2 = extract_year_from_filename(file_name2)
+extracted_year = None
 
 if year1:
     data['extracted_year'] = year1
+    extracted_year = year1
 elif year2:
     data['extracted_year'] = year2
+    extracted_year = year2
 else:
     print('Year not found in file name')
 
@@ -194,7 +203,10 @@ data = data.astype("object").replace(np.nan, None)
 # Check the output
 print(data.head())
 
-# Push data to the SQL database #
+###############################
+# Connect to the SQL database #
+###############################
+
 # Connnect, create conn connection object
 # Connect to the database using parameters from credentials.py
 conn = psycopg.connect(
@@ -203,10 +215,28 @@ conn = psycopg.connect(
     user=USERNAME,
     password=PASSWORD)
 
-# Create a cursor and use it to submit/execute a query:
+# Create a cursor and use it to submit/execute a query
 cur = conn.cursor()
 
+# Check if you have already inserted this year's data
+# If you have, exit the script immediately
+check_cmd = """
+    SELECT * FROM institutions
+    WHERE extracted_year = %s
+    LIMIT 10;
+"""
+
+extracted_year = str(extracted_year) + '-01-01 00:00:00'
+check_inserted = pd.DataFrame(cur.execute(check_cmd, [extracted_year]))
+
+if check_inserted.shape[0] > 0:
+    print(f"You have already inserted data for: {extracted_year}")
+    print("Quitting now.")
+    exit()
+
+############################
 # Data loading and summary #
+############################
 
 # To keep track of how much data has been read
 # and inserted into the database
