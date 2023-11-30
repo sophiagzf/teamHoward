@@ -1,6 +1,11 @@
 # Team Howard: College Scorecard and IPEDS Data
 Instructions for how to use our data pipeline. First, to load and update College Scorecard data supplemented by IPEDS data, and second to generate a financial report given year.
 
+### Required Directory Structure
+'data' folder
+'reports' folder 
+in the same directory as create_report.ipynb, database_schema.ipynb, load_data.py, and credentials.py.
+
 ## How to Load Data into SQL Database
 
 ### 1. Set your credentials.
@@ -54,7 +59,9 @@ Congrats! Your data should be loaded into the SQL database!
 Please make sure you have the credentials.py file filled out from part 1 of loading the SQL database.
 
 Please make sure you have the following Python libraries:
-pandas, papermill, nbconvert, jupyter
+pandas, papermill, nbconvert, jupyter, plotly, IFrame
+
+Some interactive plots in the report are generated and called in to the larger report file. Please make sure you have a 'reports' folder in the same directory as create_report.ipynb.
 
 ### There are two command line files to run:
 
