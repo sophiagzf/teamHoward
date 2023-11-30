@@ -48,7 +48,7 @@ raw_scorecard = pd.read_csv(args.college_scorecard, low_memory=False)
 raw_ipeds = pd.read_csv(args.ipeds, encoding='cp1252', low_memory=False)
 
 # Keep only the columns we want from College Scorecard data
-scorecard = raw_scorecard.loc[:, ['OPEID', 'ACCREDAGENCY',
+scorecard = raw_scorecard.loc[:, ['OPEID', 'INSTNM', 'ACCREDAGENCY',
                                   'PREDDEG', 'HIGHDEG',
                                   'CONTROL', 'REGION', 'ADM_RATE',
                                   'CCBASIC', 'TUITIONFEE_IN',
@@ -57,9 +57,12 @@ scorecard = raw_scorecard.loc[:, ['OPEID', 'ACCREDAGENCY',
                                   'CDR2', 'CDR3',
                                   'SAT_AVG', 'PCTFLOAN']]
 
+scorecard = scorecard.dropna(subset=['OPEID', 'INSTNM'])
+
 # Keep only the columns we want from the IPEDS data
 ipeds = raw_ipeds.loc[:, ['INSTNM', 'ADDR', 'ZIP', 'FIPS', 'CITY', 'STABBR',
                           'OPEID', 'CBSA', 'CSA', 'LONGITUD', 'LATITUDE']]
+ipeds = ipeds.dropna(subset=['OPEID', 'INSTNM'])
 
 # Make sure the OPEID (column we merge on) are both of type object
 scorecard['OPEID'] = scorecard['OPEID'].astype('object')
@@ -67,6 +70,8 @@ ipeds['OPEID'] = ipeds['OPEID'].astype('object')
 
 # Join the datasets together
 data = pd.merge(scorecard, ipeds, on='OPEID', how='left')
+# Drop duplicate column
+data = data.drop(['INSTNM_y'], axis=1)
 
 ###################
 # Clean the data #
@@ -74,7 +79,7 @@ data = pd.merge(scorecard, ipeds, on='OPEID', how='left')
 
 # Rename columns
 data = data.rename(columns={'OPEID': 'opeid',
-                            'INSTNM': 'name',
+                            'INSTNM_x': 'name',
                             'ADDR': 'address',
                             'STABBR': 'state',
                             'CITY': 'city',
@@ -181,6 +186,7 @@ ownership_mapping = {
     3: 'Private For-Profit'
 }
 
+
 # Apply the mappings
 data['pred_degree'] = data['pred_degree'].map(degree_mapping)
 data['highest_degree'] = data['highest_degree'].map(degree_mapping)
@@ -199,9 +205,6 @@ data['accreditor'] = data['accreditor'].astype('object')
 # NAs to None types
 data = data.where(pd.notnull(data), None)
 data = data.astype("object").replace(np.nan, None)
-
-# Check the output
-print(data.head())
 
 ###############################
 # Connect to the SQL database #
@@ -234,6 +237,9 @@ if check_inserted.shape[0] > 0:
     print("Quitting now.")
     exit()
 
+print("Preview of the data being loaded: \n\n")
+print(data.head())
+
 ############################
 # Data loading and summary #
 ############################
@@ -246,11 +252,11 @@ invalid_rows_file = "invalid_rows.csv"
 
 insert_cmd = """
         INSERT INTO institutions
-        (opeid, accreditor, pred_degree, highest_degree,
+        (opeid, name, accreditor, pred_degree, highest_degree,
         control, region, admission_rate, ccbasic,
         in_state_tuit, out_state_tuit, prog_year_tuit, revenue_tuit,
         avg_faculty_salary, two_yr_default, three_yr_default, sat_avg,
-        prop_loan, name, address, ZIP,
+        prop_loan, address, ZIP,
         fips, city, state, cbsa,
         csa, longitude, latitude, extracted_year)
         VALUES
