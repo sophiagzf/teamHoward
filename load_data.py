@@ -64,7 +64,8 @@ ipeds = raw_ipeds.loc[:, ['INSTNM', 'ADDR', 'ZIP', 'FIPS', 'CITY', 'STABBR',
                           'OPEID', 'CBSA', 'CSA', 'LONGITUD', 'LATITUDE']]
 ipeds = ipeds.dropna(subset=['OPEID', 'INSTNM'])
 
-# Make sure the OPEID (column we merge on) are both of type object and same format
+# Make sure the OPEID (column we merge on) are both 
+# of type object and same format
 scorecard['OPEID'] = scorecard['OPEID'].astype('float')
 ipeds['OPEID'] = scorecard['OPEID'].astype('float')
 scorecard['OPEID'] = scorecard['OPEID'].astype('object')
