@@ -21,7 +21,7 @@ Download the data you want to run on your computer.
 
 The College Scorecard data should start with "MERGED" and be a csv file. The IPEDS data should be a zip file. Unzip this file. Do not rename these files. They must provide the year somewhre in the file name.
 
-Example:
+### Example:
 
 "MERGED2018_19_PP.csv" contains the College Scorecard data for 2019.
 
@@ -36,13 +36,17 @@ The code for creating the table is in database-schema.ipynb. Run the two code ch
 Make sure you have the following Python libraries loaded: 
 pandas, re, argparse, os, psycopg, numpy
 
-Run the following command: 
+### Run the following command: 
 
 python load_data.py {COLLEGE SCORECARD FILEPATH} {IPEDS FILEPATH}
 
-Example: 
+It is important that you run the command with the College Scorecard filepath BEFORE the IPEDS filepath. Also, it is important that you run the command with data from the same year.
+
+### Example: 
 
 python load_data.py data/MERGED2018_19_PP.csv data/hd2019.csv
+
+The above command will load 2019 College Scorecard and IPEDS data into the SQL database 'institutions' table.
 
 Congrats! Your data should be loaded into the SQL database!
 
@@ -52,10 +56,16 @@ Please make sure you have the credentials.py file filled out from part 1 of load
 Please make sure you have the following Python libraries:
 pandas, papermill, nbconvert, jupyter
 
-There are two command line files to run:
+### There are two command line files to run:
 
 papermill create_report.ipynb create_report.ipynb -p YEAR {YEAR FOR REPORT}
 
 jupyter nbconvert --to html create_report.ipynb --output reports/report_{YEAR FOR REPORT}.html --no-input
+
+### Example:
+papermill create_report.ipynb create_report.ipynb -p YEAR 2022
+jupyter nbconvert --to html create_report.ipynb --output reports/report_2022.html --no-input
+
+The above commands will create the data report with information from 2022 College Scorecard and IPEDS data along with visualizations to see change over time for all years in your database before and including 2022.
 
 Please make sure to rename the html file in the second command to the year that the report came from! The reports folder is in the gitignore. From the html file, you can download it as a pdf by opening the file in a web browser, such as Chrome, and selecting 'Save to PDF' when you print the page.
