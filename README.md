@@ -68,4 +68,8 @@ jupyter nbconvert --to html create_report.ipynb --output reports/report_2022.htm
 
 The above commands will create the data report with information from 2022 College Scorecard and IPEDS data along with visualizations to see change over time for all years in your database before and including 2022.
 
-Please make sure to rename the html file in the second command to the year that the report came from! The reports folder is in the gitignore. From the html file, you can download it as a pdf by opening the file in a web browser, such as Chrome, and selecting 'Save to PDF' when you print the page.
+Please make sure to rename the html file in the second command to the year that the report came from! The reports folder is in the gitignore. 
+
+### Converting the Report to PDF
+
+From the html file, you can download it as a pdf by opening the html file in a web browser, such as Chrome, and selecting 'Save to PDF' when you print the page. When you export the html as a pdf this way, make sure to click 'More Settings' and set 'Scale' value to 'Custom'. Here, use 85 instead of 100. This will ensure that plots are properly sized and no legends are cut off.
