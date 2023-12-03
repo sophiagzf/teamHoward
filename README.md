@@ -59,7 +59,7 @@ Congrats! Your data should be loaded into the SQL database!
 Please make sure you have the credentials.py file filled out from part 1 of loading the SQL database.
 
 Please make sure you have the following Python libraries:
-pandas, papermill, nbconvert, jupyter, plotly, IFrame
+pandas, papermill, nbconvert, jupyter, plotly, IPython.display
 
 Some interactive plots in the report are generated and called in to the larger report file. Please make sure you have a 'reports' folder in the same directory as create_report.ipynb.
 
