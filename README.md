@@ -71,6 +71,7 @@ jupyter nbconvert --to html create_report.ipynb --output reports/report_{YEAR FO
 
 ### Example:
 papermill create_report.ipynb create_report.ipynb -p YEAR 2022
+
 jupyter nbconvert --to html create_report.ipynb --output reports/report_2022.html --no-input
 
 The above commands will create the data report with information from 2022 College Scorecard and IPEDS data along with visualizations to see change over time for all years in your database before and including 2022.
