@@ -4,7 +4,7 @@ import argparse
 import os
 import time
 from credentials import DBNAME, HOST, USERNAME, PASSWORD
-import psycopg
+import psycopg2
 import numpy as np
 
 ############################################
@@ -215,7 +215,7 @@ data = data.astype("object").replace(np.nan, None)
 
 # Connnect, create conn connection object
 # Connect to the database using parameters from credentials.py
-conn = psycopg.connect(
+conn = psycopg2.connect(
     dbname=DBNAME,
     host=HOST,
     user=USERNAME,
