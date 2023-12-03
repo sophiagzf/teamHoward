@@ -39,7 +39,7 @@ The code for creating the table is in database-schema.ipynb. Run the two code ch
 
 ### 4. Insert data into the SQL database.
 Make sure you have the following Python libraries loaded: 
-pandas, re, argparse, os, psycopg, numpy
+pandas, re, argparse, os, psycopg2, numpy
 
 ### Run the following command: 
 
