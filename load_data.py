@@ -66,15 +66,20 @@ ipeds = ipeds.dropna(subset=['OPEID', 'INSTNM'])
 
 # Make sure the OPEID (column we merge on) are both
 # of type object and same format
+# Get rid of leading 0s
+
 if scorecard['OPEID'].dtype == 'float64':
     scorecard['OPEID'] = scorecard['OPEID'].astype('int64')
 
-scorecard['OPEID'] = scorecard['OPEID'].astype('object')
+scorecard['OPEID'] = scorecard['OPEID'].astype('str')
+scorecard['OPEID'] = scorecard['OPEID'].str.lstrip('0')
 
 if ipeds['OPEID'].dtype == 'float64':
     ipeds['OPEID'] = ipeds['OPEID'].astype('int64')
 
-ipeds['OPEID'] = ipeds['OPEID'].astype('object')
+ipeds['OPEID'] = ipeds['OPEID'].astype('str')
+ipeds['OPEID'] = ipeds['OPEID'].str.lstrip('0')
+
 
 # Join the datasets together
 data = pd.merge(scorecard, ipeds, on='OPEID', how='left')
