@@ -4,7 +4,7 @@ import argparse
 import os
 import time
 from credentials import DBNAME, HOST, USERNAME, PASSWORD
-import psycopg2
+import psycopg
 import numpy as np
 
 ############################################
@@ -225,7 +225,7 @@ data = data.astype("object").replace(np.nan, None)
 
 # Connnect, create conn connection object
 # Connect to the database using parameters from credentials.py
-conn = psycopg2.connect(
+conn = psycopg.connect(
     dbname=DBNAME,
     host=HOST,
     user=USERNAME,
@@ -242,7 +242,7 @@ check_cmd = """
     LIMIT 10;
 """
 
-extracted_year = str(extracted_year) + '-01-01 00:00:00'
+extracted_year = str(extracted_year) + '-01-01'
 check_inserted = pd.DataFrame(cur.execute(check_cmd, [extracted_year]))
 
 if check_inserted.shape[0] > 0:
